@@ -1,0 +1,43 @@
+## 1.) SETUP ##
+
+# Find working directory #
+getwd()
+
+# Use scipen to prevent scientific notation #
+options(scipen=10)
+
+# Import CSV file as data frame (assigned to testing variable) #
+testing<-read.csv("MIS470housingtesting(460x25).csv")
+training<-read.csv("MIS470housingtraining(1000x25).csv")
+
+## 2.) ANALYSIS ##
+
+# Summary statistics and standard deviation or SalePrice variable #
+summary(testing$SalePrice)
+sd(testing$SalePrice)
+
+# Histogram of SalePrice variable in training dataset #
+hist(testing$SalePrice, main= "Ames, IA Housing Market Sale Prices", xlab= "Sale Price", col= "darkgreen")
+
+# Combine testing and training datasets #
+combined_data <- rbind(testing, training)
+
+# Histogram of SalePrice variable with combined dataset #
+hist(combined_data$SalePrice, main= "Ames, IA Housing Market Sale Prices (Combined Data)", xlab = "Sale Price", col= "darkgreen")
+
+## 3.) MODELING ##
+
+# Linear regression model for SalePrice variable using all explanatory variables using testing data #
+model <- lm(SalePrice ~ ., data = training)
+
+# Clean dataset of NA values #
+clean_testing <- testing[complete.cases(testing),]
+
+# Creating variable for first 20 rows of cleaned data #
+less_data <- clean_testing[1:20,]
+
+# Predict prices with first 20 rows of cleaned data and model #
+predict_prices <- predict(model, newdata = less_data)
+
+# View predicted prices #
+print(predict_prices)
